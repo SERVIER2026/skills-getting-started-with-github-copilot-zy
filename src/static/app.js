@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const cancelBtn = document.createElement("button");
             cancelBtn.className = "cancel-btn";
             cancelBtn.textContent = "Cancel Registration";
+            cancelBtn.setAttribute("aria-label", `Cancel registration for ${email} from ${name}`);
             cancelBtn.dataset.activity = name;
             cancelBtn.dataset.email = email;
             li.appendChild(cancelBtn);
@@ -174,7 +175,7 @@ document.addEventListener("DOMContentLoaded", () => {
         messageDiv.textContent = "Failed to cancel registration. Please try again.";
         messageDiv.className = "error";
         messageDiv.classList.remove("hidden");
-        console.error("Error cancelling registration:", error);
+        console.error("Error canceling registration:", error);
       }
     }
   });

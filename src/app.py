@@ -70,6 +70,10 @@ def signup_for_activity(activity_name: str, email: str):
 @app.delete("/activities/{activity_name}/cancel")
 def cancel_registration(activity_name: str, email: str):
     """Cancel a student's registration for an activity"""
+    # Validate email parameter
+    if not email or not email.strip():
+        raise HTTPException(status_code=400, detail="Email parameter is required")
+    
     # Validate activity exists
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Activity not found")
