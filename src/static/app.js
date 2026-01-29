@@ -12,6 +12,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
       // Clear loading message
       activitiesList.innerHTML = "";
+      
+      // Clear and reset activity dropdown
+      activitySelect.innerHTML = '<option value="">-- Select an activity --</option>';
 
       // Populate activities list
       Object.entries(activities).forEach(([name, details]) => {
@@ -21,27 +24,59 @@ document.addEventListener("DOMContentLoaded", () => {
         const spotsLeft = details.max_participants - details.participants.length;
 
         // Build participants list with cancel buttons
-        let participantsHTML = '';
+        const participantsList = document.createElement("div");
+        participantsList.className = "participants-list";
+        
         if (details.participants.length > 0) {
-          participantsHTML = '<div class="participants-list"><strong>Participants:</strong><ul>';
+          const strong = document.createElement("strong");
+          strong.textContent = "Participants:";
+          participantsList.appendChild(strong);
+          
+          const ul = document.createElement("ul");
           details.participants.forEach(email => {
-            participantsHTML += `
-              <li>
-                ${email}
-                <button class="cancel-btn" data-activity="${name}" data-email="${email}">Cancel Registration</button>
-              </li>
-            `;
+            const li = document.createElement("li");
+            
+            const emailSpan = document.createElement("span");
+            emailSpan.textContent = email;
+            li.appendChild(emailSpan);
+            
+            const cancelBtn = document.createElement("button");
+            cancelBtn.className = "cancel-btn";
+            cancelBtn.textContent = "Cancel Registration";
+            cancelBtn.dataset.activity = name;
+            cancelBtn.dataset.email = email;
+            li.appendChild(cancelBtn);
+            
+            ul.appendChild(li);
           });
-          participantsHTML += '</ul></div>';
+          participantsList.appendChild(ul);
         }
 
-        activityCard.innerHTML = `
-          <h4>${name}</h4>
-          <p>${details.description}</p>
-          <p><strong>Schedule:</strong> ${details.schedule}</p>
-          <p><strong>Availability:</strong> ${spotsLeft} spots left</p>
-          ${participantsHTML}
-        `;
+        const h4 = document.createElement("h4");
+        h4.textContent = name;
+        activityCard.appendChild(h4);
+        
+        const descP = document.createElement("p");
+        descP.textContent = details.description;
+        activityCard.appendChild(descP);
+        
+        const scheduleP = document.createElement("p");
+        const scheduleStrong = document.createElement("strong");
+        scheduleStrong.textContent = "Schedule: ";
+        scheduleP.appendChild(scheduleStrong);
+        scheduleP.appendChild(document.createTextNode(details.schedule));
+        activityCard.appendChild(scheduleP);
+        
+        const availP = document.createElement("p");
+        const availStrong = document.createElement("strong");
+        availStrong.textContent = "Availability: ";
+        availP.appendChild(availStrong);
+        availP.appendChild(document.createTextNode(`${spotsLeft} spots left`));
+        activityCard.appendChild(availP);
+        
+        if (details.participants.length > 0) {
+          activityCard.appendChild(participantsList);
+        }
 
         activitiesList.appendChild(activityCard);
 

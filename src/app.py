@@ -79,7 +79,7 @@ def cancel_registration(activity_name: str, email: str):
 
     # Check if student is registered
     if email not in activity["participants"]:
-        raise HTTPException(status_code=404, detail="Student not registered for this activity")
+        raise HTTPException(status_code=400, detail="Student not registered for this activity")
 
     # Remove student from participants
     activity["participants"].remove(email)
